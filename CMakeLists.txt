@@ -12,7 +12,17 @@ if(NOT CMAKE_BUILD_TYPE)
     FORCE)
 endif()
 
-enable_testing()
+option(ENABLE_TESTS  "True to enable tests for openfst pybind"  ON)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+include(openfst)
 include(pybind11)
+
+add_subdirectory(openfst-pybind)
+
+if (ENABLE_TESTS)
+  enable_testing()
+  add_subdirectory(tests)
+else()
+  message(STATUS "tests are disabled")
+endif()
