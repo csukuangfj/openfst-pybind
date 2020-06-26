@@ -24,11 +24,12 @@ class TestVectorFst(unittest.TestCase):
         vector_fst.SetFinal(s1, fst.TropicalWeight(0.25))
 
         w = fst.TropicalWeight(0.5)
-        print(type(w))
         arc = fst.StdArc(ilabel=1, olabel=1, weight=w, nextstate=1)
         vector_fst.AddArc(s0, arc)
-        vector_fst.Write('a.fst')
+        print(vector_fst)
+        print(vector_fst.Info())
 
+        vector_fst.Write('a.fst')
         # fstprint tests/a.fst
 
 

@@ -7,6 +7,7 @@
 #include "openfst-pybind/vector-fst.h"
 
 #include "fst/vector-fst.h"
+#include "openfst-pybind/fst-util.h"
 #include "openfst-pybind/fst.h"
 
 using namespace fst;
@@ -87,6 +88,51 @@ static void PybindVectorFstTpl(py::module& m, const char* name) {
   pyclass.def("Write",
               (bool (PyClass::*)(const std::string&) const)(&PyClass::Write),
               py::arg("source"));
+
+  pyclass
+      .def("Info",
+           [](const PyClass& self) -> std::string {
+             std::ostringstream os;
+             auto _fst = fst::script::FstClass(self);
+             auto fst_info = fst::FstInfo(*_fst.GetFst<Arc>(), true);
+             PrintFstInfoImpl(fst_info, os);
+             return os.str();
+           })
+      .def("__str__",
+           [](const PyClass& self) -> std::string {
+             std::ostringstream os;
+             auto _fst = fst::script::FstClass(self);
+             fst::FstPrinter<Arc>(*_fst.GetFst<Arc>(), _fst.InputSymbols(),
+                                  _fst.OutputSymbols(),
+                                  nullptr,  // state symbol table, ssyms
+                                  false,  // false means not in acceptor format
+                                  false,  // false means not to show weight one
+                                  "      ",  // fst field separator, 6 spaces
+                                  ""         // missing symbol
+                                  )
+                 .Print(os, "standard output");
+             return os.str();
+           })
+      .def(
+          "ToString",
+          [](const PyClass& self, bool is_acceptor = false,
+             bool show_weight_one = false,
+             const std::string& fst_field_separator = "      ",
+             const std::string& missing_symbol = "",
+             const std::string& dest = "stardard output") {
+            std::ostringstream os;
+            auto _fst = fst::script::FstClass(self);
+            fst::FstPrinter<Arc>(*_fst.GetFst<Arc>(), _fst.InputSymbols(),
+                                 _fst.OutputSymbols(), nullptr, is_acceptor,
+                                 show_weight_one, fst_field_separator,
+                                 missing_symbol)
+                .Print(os, dest);
+            return os.str();
+          },
+          "see fstprint for help, e.g., fstprint --help",
+          py::arg("is_acceptor") = false, py::arg("show_weight_one") = false,
+          py::arg("fst_field_separator") = "      ",
+          py::arg("missing_symbol") = "", py::arg("dest") = "stardard output");
 }
 
 void PybindVectorFst(py::module& m) {

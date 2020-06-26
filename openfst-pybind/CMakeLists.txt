@@ -3,6 +3,7 @@ pybind11_add_module(fst
   arc.cc
   const-fst.cc
   float-weight.cc
+  fst-util.cc
   fst.cc
   openfst-pybind.cc
   symbol-table.cc
@@ -20,4 +21,4 @@ else()
   target_compile_features(fst PRIVATE cxx_std_11)
 endif()
 
-target_link_libraries(fst PRIVATE openfst::openfst)
+target_link_libraries(fst PRIVATE openfst::openfst openfst::script)
