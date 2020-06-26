@@ -22,8 +22,7 @@ function(download_openfst)
     FetchContent_Populate(openfst)
   endif()
   message(STATUS "openfst is downloaded to ${openfst_SOURCE_DIR}")
-  set(so_version 20.0.0)
-  set(openfst_lib_files ${openfst_SOURCE_DIR}/src/lib/.libs/libfst.so.${so_version})
+  set(openfst_lib_files ${openfst_SOURCE_DIR}/src/lib/.libs/libfst${CMAKE_SHARED_LIBRARY_SUFFIX})
   add_custom_command(
     OUTPUT ${openfst_lib_files}
     WORKING_DIRECTORY ${openfst_SOURCE_DIR}
