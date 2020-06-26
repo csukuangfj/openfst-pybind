@@ -12,3 +12,4 @@
 import unittest
 
 import fst
+print(dir(fst))

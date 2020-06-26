@@ -16,7 +16,10 @@ namespace py = pybind11;
 
 #define DEF_INIT() pyclass.def(py::init<>())
 
-#define DEF(name) pyclass.def(#name, &PyClass::name)
+#define DEF(name, ...) pyclass.def(#name, &PyClass::name, ##__VA_ARGS__)
+
+#define DEF_STATIC(name, ...) \
+  pyclass.def_static(#name, &PyClass::name, ##__VA_ARGS__)
 
 #define DEF_REF(name) \
   pyclass.def(#name, &PyClass::name, py::return_value_policy::reference)

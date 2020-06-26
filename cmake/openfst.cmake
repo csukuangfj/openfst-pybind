@@ -22,21 +22,30 @@ function(download_openfst)
     FetchContent_Populate(openfst)
   endif()
   message(STATUS "openfst is downloaded to ${openfst_SOURCE_DIR}")
-  set(openfst_lib_files ${openfst_SOURCE_DIR}/src/lib/.libs/libfst${CMAKE_SHARED_LIBRARY_SUFFIX})
+
+  set(openfst_install_dir ${openfst_BINARY_DIR})
+  file(MAKE_DIRECTORY ${openfst_install_dir}/include)
+
+  set(openfst_lib_files ${openfst_install_dir}/lib/libfst${CMAKE_SHARED_LIBRARY_SUFFIX})
+
   add_custom_command(
     OUTPUT ${openfst_lib_files}
     WORKING_DIRECTORY ${openfst_SOURCE_DIR}
     COMMENT "Configuring Openfst"
-    COMMAND ./configure
+    COMMAND ./configure --prefix=${openfst_install_dir}
     COMMENT "Building Openfst"
-    COMMAND make -j
+    COMMAND make -j -s
+    COMMENT "Install Openfst to ${openfst_SOURCE_DIR}/install"
+    COMMAND make install
+    COMMAND ls -l ${openfst_install_dir}/*
+
   )
   add_custom_target(build_openfst DEPENDS ${openfst_lib_files})
 
   add_library(openfst::openfst SHARED IMPORTED GLOBAL)
   set_property(TARGET openfst::openfst PROPERTY IMPORTED_LOCATION ${openfst_lib_files})
   add_dependencies(openfst::openfst build_openfst ${openfst_lib_files})
-  target_include_directories(openfst::openfst INTERFACE "${openfst_SOURCE_DIR}/src/include")
+  target_include_directories(openfst::openfst INTERFACE "${openfst_install_dir}/include")
 endfunction()
 
 download_openfst()
