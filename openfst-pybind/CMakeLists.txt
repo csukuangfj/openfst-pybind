@@ -1,7 +1,13 @@
 # please sort the files in alphabetic order
 pybind11_add_module(fst
+  arc.cc
+  const-fst.cc
   float-weight.cc
+  fst.cc
   openfst-pybind.cc
+  symbol-table.cc
+  vector-fst.cc
+  weight.cc
 )
 
 target_include_directories(fst PRIVATE ${CMAKE_SOURCE_DIR})

@@ -12,6 +12,9 @@
 
 namespace py = pybind11;
 
+template <typename... Args>
+using overload_cast_ = py::detail::overload_cast_impl<Args...>;
+
 #define DEF_CLASS(name) py::class_<PyClass> pyclass(m, name);
 
 #define DEF_INIT() pyclass.def(py::init<>())
@@ -23,5 +26,8 @@ namespace py = pybind11;
 
 #define DEF_REF(name) \
   pyclass.def(#name, &PyClass::name, py::return_value_policy::reference)
+
+#define DEF_P(name, ...) \
+  pyclass.def_readwrite(#name, &PyClass::name, ##__VA_ARGS__)
 
 #endif  // OPENFST_PYBIND_OPENFST_PYBIND_H_

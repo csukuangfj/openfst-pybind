@@ -6,4 +6,8 @@
 
 #include "openfst-pybind/weight.h"
 
-void PybindWeight(py::module& m);
+#include "fst/weight.h"
+
+using namespace fst;
+
+void PybindWeight(py::module& m) { m.attr("kDelta") = kDelta; }

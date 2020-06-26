@@ -9,6 +9,6 @@
 
 #include "openfst-pybind/openfst-pybind.h"
 
-void pybind_arc(py::module& m);
+void PybindArc(py::module& m);
 
 #endif  // OPENFST_PYBIND_ARC_H_

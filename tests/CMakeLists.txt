@@ -15,6 +15,7 @@ endfunction()
 # please sort the files in alphabetic order
 set(py_test_files
   float-weight-test.py
+  vector-fst-test.py
 )
 
 foreach(source IN LISTS py_test_files)
